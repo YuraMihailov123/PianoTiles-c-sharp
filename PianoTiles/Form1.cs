@@ -14,16 +14,17 @@ namespace PianoTiles
     public partial class Form1 : Form
     {
         public int[,] map = new int[8, 4];
-        public int cellHeight = 80;
         public int cellWidth = 50;
+        public int cellHeight = 80;
 
         public Form1()
         {
             InitializeComponent();
-            this.Paint += new PaintEventHandler(Repaint);
+
             this.Text = "Piano";
             this.Width = cellWidth * 4 + 15;
             this.Height = cellHeight * 8 + 40;
+            this.Paint += new PaintEventHandler(Repaint);
             this.KeyUp += new KeyEventHandler(OnKeyboardPressed);
             Init();
         }
@@ -49,7 +50,7 @@ namespace PianoTiles
 
         public void CheckForPressedButton(int i)
         {
-            if(map[7,i] != 0)
+            if (map[7, i] != 0)
             {
                 MoveMap();
                 PlaySound(i);
@@ -59,36 +60,6 @@ namespace PianoTiles
                 MessageBox.Show("You lost!");
                 Init();
             }
-        }
-
-        public void MoveMap()
-        {
-            for (int i = 7; i > 0; i--)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    map[i, j] = map[i-1, j];
-                }
-            }
-            AddNewLine();
-            Invalidate();
-        }
-
-        public void AddNewLine()
-        {
-            Random r = new Random();
-            int j = r.Next(0, 4);
-            for (int k = 0; k < 4; k++)
-                map[0, k] = 0;
-            map[0, j] = 1;
-        }
-
-        public void Init()
-        {
-            ClearMap();
-            GenerateMap();
-            Invalidate();
-            
         }
 
         public void PlaySound(int sound)
@@ -113,17 +84,40 @@ namespace PianoTiles
             snd.Play();
         }
 
-        private void Repaint(object sender, PaintEventArgs e)
+        public void MoveMap()
         {
-            Graphics g = e.Graphics;
-            DrawMap(g);
+            for(int i = 7; i > 0; i--)
+            {
+                for(int j = 0; j < 4; j++)
+                {
+                    map[i, j] = map[i - 1, j];
+                }
+            }
+            AddNewLine();
+            Invalidate();
+        }
+
+        public void AddNewLine()
+        {
+            Random r = new Random();
+            int j = r.Next(0, 4);
+            for (int k = 0; k < 4; k++)
+                map[0, k] = 0;
+            map[0, j] = 1;
+        }
+
+        public void Init()
+        {
+            ClearMap();
+            GenerateMap();
+            Invalidate();
         }
 
         public void ClearMap()
         {
-            for (int i = 0; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for(int j = 0; j < 4; j++)
                 {
                     map[i, j] = 0;
                 }
@@ -142,7 +136,7 @@ namespace PianoTiles
 
         public void DrawMap(Graphics g)
         {
-            for (int i = 0; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 for(int j = 0; j < 4; j++)
                 {
@@ -150,20 +144,26 @@ namespace PianoTiles
                     {
                         g.FillRectangle(new SolidBrush(Color.White), cellWidth * j, cellHeight * i, cellWidth, cellHeight);
                     }
-                    if (map[i, j] == 1)
+                    if(map[i,j] == 1)
                     {
                         g.FillRectangle(new SolidBrush(Color.Black), cellWidth * j, cellHeight * i, cellWidth, cellHeight);
                     }
                 }
             }
-            for (int i = 0; i < 8; i++)
+            for(int i = 0; i < 8; i++)
             {
                 g.DrawLine(new Pen(new SolidBrush(Color.Black)), 0, i * cellHeight, 4 * cellWidth, i * cellHeight);
             }
-            for (int i = 0; i < 4; i++)
+            for(int i = 0; i < 4; i++)
             {
-                g.DrawLine(new Pen(new SolidBrush(Color.Black)), i*cellWidth, 0, i*cellWidth, 8*cellHeight);
+                g.DrawLine(new Pen(new SolidBrush(Color.Black)), i * cellWidth, 0, i * cellWidth, 8 * cellHeight);
             }
+        }
+
+        private void Repaint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            DrawMap(g);
         }
     }
 }
